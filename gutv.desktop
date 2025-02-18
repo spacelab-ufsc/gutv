@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=GUTV
+Comment=GOLDS-UFSC Telemetry Viewer
+Icon=/usr/share/icons/gutv_256x256.png
+Exec=/usr/bin/gutv
+Terminal=false
+Categories=HamRadio
