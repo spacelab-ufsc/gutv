@@ -23,11 +23,16 @@
 #  
 #
 
+import os
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf, GLib
 
 import gutv.version
+
+_UI_FILE_LOCAL                  = os.path.abspath(os.path.dirname(__file__)) + '/data/ui/gutv.glade'
+_UI_FILE_LINUX_SYSTEM           = '/usr/share/gutv/gutv.glade'
 
 class GUTV:
 
@@ -47,8 +52,21 @@ class GUTV:
 
         self.builder.connect_signals(self)
 
+        # Main window
+        self.window = self.builder.get_object("window_main")
+#        if os.path.isfile(_ICON_FILE_LOCAL):
+#            self.window.set_icon_from_file(_ICON_FILE_LOCAL)
+#        else:
+#            self.window.set_icon_from_file(_ICON_FILE_LINUX_SYSTEM)
+        self.window.set_wmclass(self.window.get_title(), self.window.get_title())
+        self.window.connect("destroy", Gtk.main_quit)
 
     def run(self):
         self.window.show_all()
 
         Gtk.main()
+
+        return 0
+
+    def destroy(window, self):
+        Gtk.main_quit()
