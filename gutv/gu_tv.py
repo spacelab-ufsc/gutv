@@ -31,8 +31,17 @@ from gi.repository import Gtk, GdkPixbuf, GLib
 
 import gutv.version
 
+# UI File
 _UI_FILE_LOCAL                  = os.path.abspath(os.path.dirname(__file__)) + '/data/ui/gutv.glade'
 _UI_FILE_LINUX_SYSTEM           = '/usr/share/gutv/gutv.glade'
+
+# Icon File
+_ICON_FILE_LOCAL                = os.path.abspath(os.path.dirname(__file__)) + '/data/img/gutv_256x256.png'
+_ICON_FILE_LINUX_SYSTEM         = '/usr/share/icons/gutv_256x256.png'
+
+# Logo File
+_LOGO_FILE_LOCAL                = os.path.abspath(os.path.dirname(__file__)) + '/data/img/spacelab-logo-full-400x200.png'
+_LOGO_FILE_LINUX_SYSTEM         = '/usr/share/spacelab_decoder/spacelab-logo-full-400x200.png'
 
 class GUTV:
 
@@ -52,14 +61,30 @@ class GUTV:
 
         self.builder.connect_signals(self)
 
+        self._build_widgets()
+
+    def _build_widgets(self):
         # Main window
         self.window = self.builder.get_object("window_main")
-#        if os.path.isfile(_ICON_FILE_LOCAL):
-#            self.window.set_icon_from_file(_ICON_FILE_LOCAL)
-#        else:
-#            self.window.set_icon_from_file(_ICON_FILE_LINUX_SYSTEM)
+        if os.path.isfile(_ICON_FILE_LOCAL):
+            self.window.set_icon_from_file(_ICON_FILE_LOCAL)
+        else:
+            self.window.set_icon_from_file(_ICON_FILE_LINUX_SYSTEM)
         self.window.set_wmclass(self.window.get_title(), self.window.get_title())
         self.window.connect("destroy", Gtk.main_quit)
+
+        # About dialog
+        self.aboutdialog = self.builder.get_object("aboutdialog_gutv")
+        self.aboutdialog.set_version(gutv.version.__version__)
+        if os.path.isfile(_LOGO_FILE_LOCAL):
+            self.aboutdialog.set_logo(GdkPixbuf.Pixbuf.new_from_file(_LOGO_FILE_LOCAL))
+        else:
+            self.aboutdialog.set_logo(GdkPixbuf.Pixbuf.new_from_file(_LOGO_FILE_LINUX_SYSTEM))
+
+        # About toolbutton
+        self.toolbutton_about = self.builder.get_object("toolbutton_about")
+        self.toolbutton_about.connect("clicked", self.on_toolbutton_about_clicked)
+
 
     def run(self):
         self.window.show_all()
@@ -70,3 +95,9 @@ class GUTV:
 
     def destroy(window, self):
         Gtk.main_quit()
+
+    def on_toolbutton_about_clicked(self, toolbutton):
+        response = self.aboutdialog.run()
+
+        if response == Gtk.ResponseType.DELETE_EVENT:
+            self.aboutdialog.hide()
