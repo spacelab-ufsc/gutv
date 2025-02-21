@@ -1,5 +1,5 @@
 <h1 align="center">
-    GOLDS-UFSC Telemetry Viewer
+    GOLDS-UFSC TELEMETRY VIEWER
     <br>
 </h1>
 
@@ -19,8 +19,9 @@
 
 <p align="center">
     <a href="#overview">Overview</a> •
-    <a href="#satellites">Satellites</a> •
     <a href="#dependencies">Dependencies</a> •
+    <a href="#installing">Installing</a> •
+    <a href="#documentation">Documentation</a> •
     <a href="#license">License</a>
 </p>
 
@@ -44,7 +45,7 @@ Below, there is an image of the main window of the software:
 
 ```sudo dnf install python3 python3-gobject```
 
-## Installing
+# Installing
 
 ```python setup.py install```
 
