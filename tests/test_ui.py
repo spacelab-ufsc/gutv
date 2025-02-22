@@ -34,7 +34,7 @@ def test_ui():
     button_preferences              = builder.get_object("button_preferences")
     entry_address                   = builder.get_object("entry_address")
     entry_port                      = builder.get_object("entry_port")
-    togglebutton_open_socket        = builder.get_object("togglebutton_open_socket")
+    button_open_socket              = builder.get_object("button_open_socket")
     button_close_socket             = builder.get_object("button_close_socket")
     toolbutton_about                = builder.get_object("toolbutton_about")
     label_eps_mcu_date              = builder.get_object("label_eps_mcu_date")
@@ -88,7 +88,7 @@ def test_ui():
     assert button_preferences               != None
     assert entry_address                    != None
     assert entry_port                       != None
-    assert togglebutton_open_socket         != None
+    assert button_open_socket               != None
     assert button_close_socket              != None
     assert toolbutton_about                 != None
     assert label_eps_mcu_date               != None
