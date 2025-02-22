@@ -17,7 +17,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <child>
-              <object class="GtkToolButton">
+              <object class="GtkToolButton" id="button_preferences">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes">Preferences</property>
@@ -61,7 +61,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="entry_address">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="text" translatable="yes">127.0.0.1</property>
@@ -85,7 +85,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="entry_port">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="text" translatable="yes">7071</property>
@@ -97,7 +97,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkToggleButton">
+                      <object class="GtkToggleButton" id="togglebutton_open_socket">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
@@ -116,7 +116,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkToggleButton">
+                      <object class="GtkToggleButton" id="button_close_socket">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can-focus">True</property>
@@ -1859,7 +1859,7 @@
                             <property name="can-focus">False</property>
                             <property name="left-padding">12</property>
                             <child>
-                              <!-- n-columns=2 n-rows=6 -->
+                              <!-- n-columns=2 n-rows=11 -->
                               <object class="GtkGrid">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -1902,7 +1902,12 @@
                                   <object class="GtkLabel">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes">label</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">Mode:</property>
+                                    <attributes>
+                                      <attribute name="weight" value="bold"/>
+                                      <attribute name="scale" value="1.5"/>
+                                    </attributes>
                                   </object>
                                   <packing>
                                     <property name="left-attach">0</property>
@@ -1913,7 +1918,10 @@
                                   <object class="GtkLabel">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes">label</property>
+                                    <property name="label" translatable="yes">Normal</property>
+                                    <attributes>
+                                      <attribute name="scale" value="1.5"/>
+                                    </attributes>
                                   </object>
                                   <packing>
                                     <property name="left-attach">1</property>
@@ -2038,6 +2046,154 @@
                                   <packing>
                                     <property name="left-attach">1</property>
                                     <property name="top-attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="label" translatable="yes">Date Last Mode Change:</property>
+                                    <attributes>
+                                      <attribute name="weight" value="bold"/>
+                                      <attribute name="scale" value="1.5"/>
+                                    </attributes>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">6</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="label" translatable="yes">1970/01/01</property>
+                                    <attributes>
+                                      <attribute name="scale" value="1.5"/>
+                                    </attributes>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">6</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="label" translatable="yes">Time Last Mode Change:</property>
+                                    <attributes>
+                                      <attribute name="weight" value="bold"/>
+                                      <attribute name="scale" value="1.5"/>
+                                    </attributes>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">7</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="label" translatable="yes">00:00:00</property>
+                                    <attributes>
+                                      <attribute name="scale" value="1.5"/>
+                                    </attributes>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">7</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">Mode Duration:</property>
+                                    <attributes>
+                                      <attribute name="weight" value="bold"/>
+                                      <attribute name="scale" value="1.5"/>
+                                    </attributes>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">8</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="label" translatable="yes">0 sec</property>
+                                    <attributes>
+                                      <attribute name="scale" value="1.5"/>
+                                    </attributes>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">8</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">Initial Hibernation:</property>
+                                    <attributes>
+                                      <attribute name="weight" value="bold"/>
+                                      <attribute name="scale" value="1.5"/>
+                                    </attributes>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">9</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="label" translatable="yes">Not Executed</property>
+                                    <attributes>
+                                      <attribute name="scale" value="1.5"/>
+                                    </attributes>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">9</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">Initial Hibernation Time:</property>
+                                    <attributes>
+                                      <attribute name="weight" value="bold"/>
+                                      <attribute name="scale" value="1.5"/>
+                                    </attributes>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">10</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="label" translatable="yes">0 min</property>
+                                    <attributes>
+                                      <attribute name="scale" value="1.5"/>
+                                    </attributes>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">10</property>
                                   </packing>
                                 </child>
                               </object>
