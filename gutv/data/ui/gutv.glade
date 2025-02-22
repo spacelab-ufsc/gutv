@@ -97,7 +97,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkToggleButton" id="togglebutton_open_socket">
+                      <object class="GtkButton" id="button_open_socket">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>

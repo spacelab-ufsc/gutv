@@ -25,6 +25,8 @@
 
 import os
 import json
+import socket
+import datetime
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -65,6 +67,8 @@ class GUTV:
 
         self._build_widgets()
 
+        self._server_socket = None
+
     def _build_widgets(self):
         # Main window
         self.window = self.builder.get_object("window_main")
@@ -74,6 +78,15 @@ class GUTV:
             self.window.set_icon_from_file(_ICON_FILE_LINUX_SYSTEM)
         self.window.set_wmclass(self.window.get_title(), self.window.get_title())
         self.window.connect("destroy", Gtk.main_quit)
+
+        # Toolbar
+        self.button_preferences         = self.builder.get_object("button_preferences")
+        self.entry_address              = self.builder.get_object("entry_address")
+        self.entry_port                 = self.builder.get_object("entry_port")
+        self.button_open_socket         = self.builder.get_object("button_open_socket")
+        self.button_open_socket.connect("clicked", self.on_button_open_socket_clicked)
+        self.button_close_socket        = self.builder.get_object("button_close_socket")
+        self.button_close_socket.connect("clicked", self.on_button_close_socket_clicked)
 
         # EPS tab
         self.label_eps_mcu_date             = self.builder.get_object("label_eps_mcu_date")
@@ -145,6 +158,37 @@ class GUTV:
     def destroy(window, self):
         Gtk.main_quit()
 
+    def on_button_open_socket_clicked(self, button):
+        try:
+            adr = self.entry_address.get_text()
+            port = int(self.entry_port.get_text())
+
+            self._server_socket = self._create_socket_server(adr, int(port))
+
+            if self._server_socket:
+                # Monitor the socket for incoming connections using GLib's IO watch
+                self._socket_io_channel = GLib.IOChannel(self._server_socket.fileno())
+                GLib.io_add_watch(self._socket_io_channel, GLib.IO_IN, self._handle_new_connection)
+
+                self.entry_address.set_sensitive(False)
+                self.entry_port.set_sensitive(False)
+                self.button_open_socket.set_sensitive(False)
+                self.button_close_socket.set_sensitive(True)
+        except socket.error as e:
+            error_dialog = Gtk.MessageDialog(None, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "Error opening the socker server!")
+            error_dialog.format_secondary_text(str(e))
+            error_dialog.run()
+            error_dialog.destroy()
+
+    def on_button_close_socket_clicked(self, button):
+        self._server_socket.shutdown(socket.SHUT_RDWR)
+        self._server_socket.close()
+
+        self.entry_address.set_sensitive(True)
+        self.entry_port.set_sensitive(True)
+        self.button_open_socket.set_sensitive(True)
+        self.button_close_socket.set_sensitive(False)
+
     def on_toolbutton_about_clicked(self, toolbutton):
         response = self.aboutdialog.run()
 
@@ -152,14 +196,14 @@ class GUTV:
             self.aboutdialog.hide()
 
     def _decode_pkt(self, pkt_json):
-        data = json.loads(pkt_json)[0]
+        data = json.loads(pkt_json)
 
         if "eps_timestamp" in data:
-            self.label_eps_mcu_date.set_text(convert.convert_epoch_to_date(int(data["eps_timestamp"])))
-            self.label_eps_mcu_time.set_text(convert.convert_epoch_to_time(int(data["eps_timestamp"])))
+            self.label_eps_mcu_date.set_text(datetime.datetime.fromtimestamp(int(data["eps_timestamp"])).strftime('%Y/%m/%d'))
+            self.label_eps_mcu_time.set_text(datetime.datetime.fromtimestamp(int(data["eps_timestamp"])).strftime('%H:%M:%S'))
 
         if "eps_mcu_temp" in data:
-            self.label_eps_mcu_temp.set_text(str(convert.convert_temp_kelvin_to_celsius(int(data["eps_mcu_temp"]))) + " " + "°C")
+            self.label_eps_mcu_temp.set_text(str((int(data["eps_mcu_temp"]) - 273)) + " " + "°C")
 
         if "eps_mcu_curr" in data:
             self.label_eps_mcu_curr.set_text(data["eps_mcu_curr"] + " " + "mA")
@@ -171,101 +215,127 @@ class GUTV:
             self.label_eps_mcu_reset_count.set_text(data["eps_mcu_rst_counter"])
 
         if "eps_sp_volt_mypx" in data:
-            self.label_eps_sp_volt_mypx.set_text()
+            self.label_eps_sp_volt_mypx.set_text(data["eps_sp_volt_mypx"] + " " + "mV")
 
         if "eps_sp_volt_mxpz" in data:
-            self.label_eps_sp_volt_mxpz.set_text()
+            self.label_eps_sp_volt_mxpz.set_text(data["eps_sp_volt_mxpz"] + " " + "mV")
 
         if "eps_sp_volt_mzpy" in data:
-            self.label_eps_sp_volt_mzpy.set_text()
+            self.label_eps_sp_volt_mzpy.set_text(data["eps_sp_volt_mzpy"] + " " + "mV")
 
         if "eps_sp_curr_mx" in data:
-            self.label_eps_sp_curr_mx.set_text()
+            self.label_eps_sp_curr_mx.set_text(data["eps_sp_curr_mx"] + " " + "mA")
 
         if "eps_sp_curr_px" in data:
-            self.label_eps_sp_curr_px.set_text()
+            self.label_eps_sp_curr_px.set_text(data["eps_sp_curr_px"] + " " + "mA")
 
         if "eps_sp_curr_my" in data:
-            self.label_eps_sp_curr_my.set_text()
+            self.label_eps_sp_curr_my.set_text(data["eps_sp_curr_my"] + " " + "mA")
 
         if "eps_sp_curr_py" in data:
-            self.label_eps_sp_curr_py.set_text()
+            self.label_eps_sp_curr_py.set_text(data["eps_sp_curr_py"] + " " + "mA")
 
         if "eps_sp_curr_mz" in data:
-            self.label_eps_sp_curr_mz.set_text()
+            self.label_eps_sp_curr_mz.set_text(data["eps_sp_curr_mz"] + " " + "mA")
 
         if "eps_sp_curr_pz" in data:
-            self.label_eps_sp_curr_pz.set_text()
+            self.label_eps_sp_curr_pz.set_text(data["eps_sp_curr_pz"] + " " + "mA")
 
         if "eps_mppt_1_dc" in data:
-            self.label_eps_mppt_dc_ch_1.set_text()
+            self.label_eps_mppt_dc_ch_1.set_text(data["eps_mppt_1_dc"] + " " + "%")
 
         if "eps_mppt_2_dc" in data:
-            self.label_eps_mppt_dc_ch_2.set_text()
+            self.label_eps_mppt_dc_ch_2.set_text(data["eps_mppt_2_dc"] + " " + "%")
 
         if "eps_mppt_3_dc" in data:
-            self.label_eps_mppt_dc_ch_3.set_text()
+            self.label_eps_mppt_dc_ch_3.set_text(data["eps_mppt_3_dc"] + " " + "%")
 
-        if "" in data:
-            self.label_eps_mppt_mode_ch_1.set_text()
+        if "eps_mppt_1_mode" in data:
+            if int(data["eps_mppt_1_mode"]) == 0:
+                self.label_eps_mppt_mode_ch_1.set_text("Automatic")
+            elif int(data["eps_mppt_1_mode"]) == 1:
+                self.label_eps_mppt_mode_ch_1.set_text("Manual")
+            else:
+                self.label_eps_mppt_mode_ch_1.set_text("Unknown")
 
-        if "" in data:
-            self.label_eps_mppt_mode_ch_2.set_text()
+        if "eps_mppt_2_mode" in data:
+            if int(data["eps_mppt_2_mode"]) == 0:
+                self.label_eps_mppt_mode_ch_2.set_text("Automatic")
+            elif int(data["eps_mppt_2_mode"]) == 1:
+                self.label_eps_mppt_mode_ch_2.set_text("Manual")
+            else:
+                self.label_eps_mppt_mode_ch_2.set_text("Unknown")
 
-        if "" in data:
-            self.label_eps_mppt_mode_ch_3.set_text()
+        if "eps_mppt_3_mode" in data:
+            if int(data["eps_mppt_3_mode"]) == 0:
+                self.label_eps_mppt_mode_ch_3.set_text("Automatic")
+            elif int(data["eps_mppt_3_mode"]) == 1:
+                self.label_eps_mppt_mode_ch_3.set_text("Manual")
+            else:
+                self.label_eps_mppt_mode_ch_3.set_text("Unknown")
 
-        if "" in data:
-            self.label_eps_mppt_output_volt.set_text()
+        if "eps_mppt_sp_volt" in data:
+            self.label_eps_mppt_output_volt.set_text(data["eps_mppt_sp_volt"] + " " + "mV")
 
-        if "" in data:
-            self.label_eps_rtd_ch_0.set_text()
+        if "eps_rtd_0_temp" in data:
+            self.label_eps_rtd_ch_0.set_text(str(int(data["eps_rtd_0_temp"]) - 273) + " " + "°C")
 
-        if "" in data:
-            self.label_eps_rtd_ch_1.set_text()
+        if "eps_rtd_1_temp" in data:
+            self.label_eps_rtd_ch_1.set_text(str(int(data["eps_rtd_1_temp"]) - 273) + " " + "°C")
 
-        if "" in data:
-            self.label_eps_rtd_ch_2.set_text()
+        if "eps_rtd_2_temp" in data:
+            self.label_eps_rtd_ch_2.set_text(str(int(data["eps_rtd_2_temp"]) - 273) + " " + "°C")
 
-        if "" in data:
-            self.label_eps_rtd_ch_3.set_text()
+        if "eps_rtd_3_temp" in data:
+            self.label_eps_rtd_ch_3.set_text(str(int(data["eps_rtd_3_temp"]) - 273) + " " + "°C")
 
-        if "" in data:
-            self.label_eps_rtd_ch_4.set_text()
+        if "eps_rtd_4_temp" in data:
+            self.label_eps_rtd_ch_4.set_text(str(int(data["eps_rtd_4_temp"]) - 273) + " " + "°C")
 
-        if "" in data:
-            self.label_eps_rtd_ch_5.set_text()
+        if "eps_rtd_5_temp" in data:
+            self.label_eps_rtd_ch_5.set_text(str(int(data["eps_rtd_5_temp"]) - 273) + " " + "°C")
 
-        if "" in data:
-            self.label_eps_rtd_ch_6.set_text()
+        if "eps_rtd_6_temp" in data:
+            self.label_eps_rtd_ch_6.set_text(str(int(data["eps_rtd_6_temp"]) - 273) + " " + "°C")
 
-        if "" in data:
-            self.label_eps_bat_volt.set_text()
+        if "eps_bat_volt" in data:
+            self.label_eps_bat_volt.set_text(data["eps_bat_volt"] + " " + "mV")
 
-        if "" in data:
-            self.label_eps_bat_curr.set_text()
+        if "eps_bat_curr" in data:
+            self.label_eps_bat_curr.set_text(data["eps_bat_curr"] + " " + "mA")
 
-        if "" in data:
-            self.label_eps_bat_average_curr.set_text()
+        if "eps_bat_avg_curr" in data:
+            self.label_eps_bat_average_curr.set_text(data["eps_bat_avg_curr"] + " " + "mA")
 
-        if "" in data:
-            self.label_eps_bat_acc_curr.set_text()
+        if "eps_bat_acc_curr" in data:
+            self.label_eps_bat_acc_curr.set_text(data["eps_bat_acc_curr"] + " " + "mA")
 
-        if "" in data:
-            self.label_eps_bat_charge.set_text()
+        if "eps_bat_charge" in data:
+            self.label_eps_bat_charge.set_text(data["eps_bat_charge"] + " " + "mAh")
 
-        if "" in data:
-            self.label_eps_bat_heater_1_dc.set_text()
+        if "eps_bat_heater_1_dc" in data:
+            self.label_eps_bat_heater_1_dc.set_text(data["eps_bat_heater_1_dc"] + " " + "%")
 
-        if "" in data:
-            self.label_eps_bat_heater_2_dc.set_text()
+        if "eps_bat_heater_2_dc" in data:
+            self.label_eps_bat_heater_2_dc.set_text(data["eps_bat_heater_2_dc"] + " " + "%")
 
-        if "" in data:
-            self.label_eps_bat_heater_1_mode.set_text()
+        if "eps_bat_heater_1_mode" in data:
+            if int(data["eps_bat_heater_1_mode"]) == 0:
+                self.label_eps_bat_heater_1_mode.set_text("Automatic")
+            elif int(data["eps_bat_heater_1_mode"]) == 1:
+                self.label_eps_bat_heater_1_mode.set_text("Manual")
+            else:
+                self.label_eps_bat_heater_1_mode.set_text("Unknown")
 
-        if "" in data:
-            self.label_eps_bat_heater_2_mode.set_text()
+        if "eps_bat_heater_2_mode" in data:
+            if int(data["eps_bat_heater_2_mode"]) == 0:
+                self.label_eps_bat_heater_2_mode.set_text("Automatic")
+            elif int(data["eps_bat_heater_2_mode"]) == 1:
+                self.label_eps_bat_heater_2_mode.set_text("Manual")
+            else:
+                self.label_eps_bat_heater_2_mode.set_text("Unknown")
 
+        '''
         if "" in data:
             self.label_eps_bat_temp_monitor.set_text()
 
@@ -289,6 +359,7 @@ class GUTV:
 
         if "" in data:
             self.label_eps_bat_rsrc.set_text()
+        '''
 
     def _load_default_values_eps(self):
         self.label_eps_mcu_date.set_text("1970/01/01")
@@ -337,3 +408,48 @@ class GUTV:
         self.label_eps_bat_rsac.set_text("0 mAh")
         self.label_eps_bat_rarc.set_text("0 %")
         self.label_eps_bat_rsrc.set_text("0 %")
+
+    def _create_socket_server(self, adr, port):
+        """Create a TCP/IP socket server"""
+        try:
+            server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            server_socket.bind((adr, port))
+            server_socket.listen(1)
+            return server_socket
+        except socket.error as e:
+            error_dialog = Gtk.MessageDialog(None, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "Error creating a socket server!")
+            error_dialog.format_secondary_text(str(e))
+            error_dialog.run()
+            error_dialog.destroy()
+            return None
+
+    def _handle_new_connection(self, source, condition):
+        """Handle incoming connections"""
+        if condition == GLib.IO_IN:
+            client_socket, address = self._server_socket.accept()
+
+            # Create an IOChannel for the client socket to handle incoming data
+            client_io_channel = GLib.IOChannel(client_socket.fileno())
+            client_io_channel.set_encoding(None)  # Binary mode (important for raw data)
+
+            # Monitor the client socket for incoming data
+            GLib.io_add_watch(client_io_channel, GLib.IO_IN, self._handle_data, client_socket)
+
+        return True  # Keep the handler active
+
+    def _handle_data(self, source, condition, client_socket):
+        """Handle incoming data from the client"""
+        if condition == GLib.IO_IN:
+            try:
+                data = client_socket.recv(1024)  # Read incoming data (max 1024 bytes)
+                if data:
+                    self._decode_pkt(data)
+                else:
+                    # Connection closed by client
+                    client_socket.close()
+                    return False  # Stop the IO watch for this client
+            except socket.error as e:
+                client_socket.close()
+                return False  # Stop the IO watch for this client
+        return True  # Keep the handler active
