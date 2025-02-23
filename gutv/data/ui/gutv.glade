@@ -1959,7 +1959,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel" id="label_obdh_mcu_last_reset_caus">
+                                  <object class="GtkLabel" id="label_obdh_mcu_reset_count">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="label" translatable="yes">0</property>

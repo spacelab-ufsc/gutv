@@ -136,6 +136,46 @@ class GUTV:
         self.label_eps_bat_rarc             = self.builder.get_object("label_eps_bat_rarc")
         self.label_eps_bat_rsrc             = self.builder.get_object("label_eps_bat_rsrc")
 
+        # OBDH
+        self.label_obdh_mcu_date                    = self.builder.get_object("label_obdh_mcu_date")
+        self.label_obdh_mcu_time                    = self.builder.get_object("label_obdh_mcu_time")
+        self.label_obdh_mcu_temp                    = self.builder.get_object("label_obdh_mcu_temp")
+        self.label_obdh_mcu_last_reset_cause        = self.builder.get_object("label_obdh_mcu_last_reset_cause")
+        self.label_obdh_mcu_reset_count             = self.builder.get_object("label_obdh_mcu_reset_count")
+        self.label_obdh_general_voltage             = self.builder.get_object("label_obdh_general_voltage")
+        self.label_obdh_general_current             = self.builder.get_object("label_obdh_general_current")
+        self.label_obdh_mem_sec_obdh                = self.builder.get_object("label_obdh_mem_sec_obdh")
+        self.label_obdh_mem_sec_eps                 = self.builder.get_object("label_obdh_mem_sec_eps")
+        self.label_obdh_mem_sec_ttc_0               = self.builder.get_object("label_obdh_mem_sec_ttc_0")
+        self.label_obdh_mem_sec_ttc_1               = self.builder.get_object("label_obdh_mem_sec_ttc_1")
+        self.label_obdh_mem_sec_antenna             = self.builder.get_object("label_obdh_mem_sec_antenna")
+        self.label_obdh_mem_sec_edc                 = self.builder.get_object("label_obdh_mem_sec_edc")
+        self.label_obdh_mem_sec_payloadx            = self.builder.get_object("label_obdh_mem_sec_payloadx")
+        self.label_obdh_mem_sec_sbcd                = self.builder.get_object("label_obdh_mem_sec_sbcd")
+        self.label_obdh_position_lattitude          = self.builder.get_object("label_obdh_position_lattitude")
+        self.label_obdh_position_longitude          = self.builder.get_object("label_obdh_position_longitude")
+        self.label_obdh_position_altitude           = self.builder.get_object("label_obdh_position_altitude")
+        self.textview_obdh_position_tle             = self.builder.get_object("textview_obdh_position_tle")
+
+        self.textbuffer_obdh_position_tle           = self.textview_obdh_position_tle.get_buffer()
+        self.label_obdh_position_date               = self.builder.get_object("label_obdh_position_date")
+        self.label_obdh_position_time               = self.builder.get_object("label_obdh_position_time")
+        self.label_obdh_op_last_valid_tc            = self.builder.get_object("label_obdh_op_last_valid_tc")
+        self.label_obdh_op_mode                     = self.builder.get_object("label_obdh_op_mode")
+        self.label_obdh_op_date_last_mode_change    = self.builder.get_object("label_obdh_op_date_last_mode_change")
+        self.label_obdh_op_time_last_mode_change    = self.builder.get_object("label_obdh_op_time_last_mode_change")
+        self.label_obdh_op_mode_duration            = self.builder.get_object("label_obdh_op_mode_duration")
+        self.label_obdh_op_initial_hib              = self.builder.get_object("label_obdh_op_initial_hib")
+        self.label_obdh_op_initial_hib_time         = self.builder.get_object("label_obdh_op_initial_hib_time")
+        self.label_obdh_op_manual_mode              = self.builder.get_object("label_obdh_op_manual_mode")
+        self.label_obdh_op_main_edc                 = self.builder.get_object("label_obdh_op_main_edc")
+        self.label_obdh_op_general_tm               = self.builder.get_object("label_obdh_op_general_tm")
+        self.label_obdh_op_main_pl_state            = self.builder.get_object("label_obdh_op_main_pl_state")
+        self.label_obdh_op_secondary_pl_state       = self.builder.get_object("label_obdh_op_secondary_pl_state")
+        self.label_obdh_op_date_last_reading        = self.builder.get_object("label_obdh_op_date_last_reading")
+        self.label_obdh_op_time_last_reading        = self.builder.get_object("label_obdh_op_time_last_reading")
+        self.label_obdh_op_remaining_hib_time       = self.builder.get_object("label_obdh_op_remaining_hib_time")
+
         # About dialog
         self.aboutdialog = self.builder.get_object("aboutdialog_gutv")
         self.aboutdialog.set_version(gutv.version.__version__)
@@ -363,6 +403,141 @@ class GUTV:
         if "" in data:
             self.label_eps_bat_rsrc.set_text()
         '''
+        if "obdh_timestamp" in data:
+            self.label_obdh_mcu_date.set_text(datetime.datetime.fromtimestamp(int(data["obdh_timestamp"])).strftime('%Y/%m/%d'))
+            self.label_obdh_mcu_time.set_text(datetime.datetime.fromtimestamp(int(data["obdh_timestamp"])).strftime('%H:%M:%S'))
+
+        if "obdh_mcu_temp" in data:
+            self.label_obdh_mcu_temp.set_text(str((int(data["obdh_mcu_temp"]) - 273)) + " " + "°C")
+
+        if "obdh_mcu_last_rst_cause" in data:
+            self.label_obdh_mcu_last_reset_cause.set_text(data["obdh_mcu_last_rst_cause"])
+
+        if "obdh_mcu_rst_count" in data:
+            self.label_obdh_mcu_reset_count.set_text(data["obdh_mcu_rst_count"])
+
+        if "obdh_volt" in data:
+            self.label_obdh_general_voltage.set_text(data["obdh_volt"] + " " + "mV")
+
+        if "obdh_curr" in data:
+            self.label_obdh_general_current.set_text(data["obdh_curr"] + " " + "mA")
+
+        if "obdh_mem_sec_obdh" in data:
+            self.label_obdh_mem_sec_obdh.set_text(data["obdh_mem_sec_obdh"])
+
+        if "obdh_mem_sec_eps" in data:
+            self.label_obdh_mem_sec_eps.set_text(data["obdh_mem_sec_eps"])
+
+        if "obdh_mem_sec_ttc_0" in data:
+            self.label_obdh_mem_sec_ttc_0.set_text(data["obdh_mem_sec_ttc_0"])
+
+        if "obdh_mem_sec_ttc_1" in data:
+            self.label_obdh_mem_sec_ttc_1.set_text(data["obdh_mem_sec_ttc_1"])
+
+        if "obdh_mem_sec_ant" in data:
+            self.label_obdh_mem_sec_antenna.set_text(data["obdh_mem_sec_ant"])
+
+        if "obdh_mem_sec_edc" in data:
+            self.label_obdh_mem_sec_edc.set_text(data["obdh_mem_sec_edc"])
+
+        if "obdh_mem_sec_plx" in data:
+            self.label_obdh_mem_sec_payloadx.set_text(data["obdh_mem_sec_plx"])
+
+        if "obdh_mem_sec_sbcd" in data:
+            self.label_obdh_mem_sec_sbcd.set_text(data["obdh_mem_sec_sbcd"])
+
+        if "obdh_pos_lat" in data:
+            self.label_obdh_position_lattitude.set_text(data["obdh_pos_lat"] + "°")
+
+        if "obdh_pos_lon" in data:
+            self.label_obdh_position_longitude.set_text(data["obdh_pos_lon"] + "°")
+
+        if "obdh_pos_alt" in data:
+            self.label_obdh_position_altitude.set_text(data["obdh_pos_alt"] + " " + "km")
+
+        if "obdh_pos_tle_line_1" in data:
+            self.textbuffer_obdh_position_tle.set_text(data["obdh_pos_tle_line_1"])
+
+        if "obdh_pos_tle_line_2" in data:
+            self.textbuffer_obdh_position_tle.set_text(data["obdh_pos_tle_line_2"])
+
+        if "obdh_pos_last_tle_upd_ts" in data:
+            self.label_obdh_position_date.set_text(datetime.datetime.fromtimestamp(int(data["obdh_pos_last_tle_upd_ts"])).strftime('%Y/%m/%d'))
+            self.label_obdh_position_time.set_text(datetime.datetime.fromtimestamp(int(data["obdh_pos_last_tle_upd_ts"])).strftime('%H:%M:%S'))
+
+        if "obdh_op_last_val_tc" in data:
+            self.label_obdh_op_last_valid_tc.set_text(data["obdh_op_last_val_tc"])
+
+        if "obdh_op_mode" in data:
+            if int(data["obdh_op_mode"]) == 0:
+                self.label_obdh_op_mode.set_text("Normal")
+            elif int(data["obdh_op_mode"]) == 1:
+                self.label_obdh_op_mode.set_text("Hibernation")
+            elif int(data["obdh_op_mode"]) == 2:
+                self.label_obdh_op_mode.set_text("Standby")
+            else:
+                self.label_obdh_op_mode.set_text("Unknown")
+
+        if "obdh_op_last_mode_change_ts" in data:
+            self.label_obdh_op_date_last_mode_change.set_text(datetime.datetime.fromtimestamp(int(data["obdh_op_last_mode_change_ts"])).strftime('%Y/%m/%d'))
+            self.label_obdh_op_time_last_mode_change.set_text(datetime.datetime.fromtimestamp(int(data["obdh_op_last_mode_change_ts"])).strftime('%H:%M:%S'))
+
+        if "obdh_op_mode_dur" in data:
+            self.label_obdh_op_mode_duration.set_text(data["obdh_op_mode_dur"] + " " + "sec")
+
+        if "obdh_op_init_hib" in data:
+            if int(data["obdh_op_init_hib"]) == 0:
+                self.label_obdh_op_initial_hib.set_text("Not Executed")
+            if int(data["obdh_op_init_hib"]) == 1:
+                self.label_obdh_op_initial_hib.set_text("Executed")
+            else:
+                self.label_obdh_op_initial_hib.set_text("Unknown")
+
+        if "obdh_op_init_hib_time" in data:
+            self.label_obdh_op_initial_hib_time.set_text(data["obdh_op_init_hib_time"] + " " + "min")
+
+        if "obdh_op_manual_mode" in data:
+            if int(data["obdh_op_manual_mode"]) == 0:
+                self.label_obdh_op_manual_mode.set_text("Disabled")
+            elif int(data["obdh_op_manual_mode"]) == 1:
+                self.label_obdh_op_manual_mode.set_text("Enabled")
+            else:
+                self.label_obdh_op_manual_mode.set_text("Unknown")
+
+        if "obdh_op_main_edc" in data:
+            if int(data["obdh_op_main_edc"]) == 1:
+                self.label_obdh_op_main_edc.set_text("Main")
+            elif int(data["obdh_op_main_edc"]) == 2:
+                self.label_obdh_op_main_edc.set_text("Redundant")
+            else:
+                self.label_obdh_op_main_edc.set_text("Unknown")
+
+        if "obdh_op_general_tm" in data:
+            if int(data["obdh_op_general_tm"]) == 0:
+                self.label_obdh_op_general_tm.set_text("Disabled")
+            elif int(data["obdh_op_general_tm"]) == 1:
+                self.label_obdh_op_general_tm.set_text("Enabled")
+            else:
+                self.label_obdh_op_general_tm.set_text("Unknown")
+
+        if "obdh_op_main_pl_state" in data:
+            if int(data["obdh_op_main_pl_state"]) == 0:
+                self.label_obdh_op_main_pl_state.set_text("Disabled")
+            else:
+                self.label_obdh_op_main_pl_state.set_text(data["obdh_op_main_pl_state"])
+
+        if "obdh_op_sec_pl_state" in data:
+            if int(data["obdh_op_sec_pl_state"]) == 0:
+                self.label_obdh_op_secondary_pl_state.set_text("Disabled")
+            else:
+                self.label_obdh_op_secondary_pl_state.set_text(data["obdh_op_sec_pl_state"])
+
+        if "obdh_op_last_reading_ts" in data:
+            self.label_obdh_op_date_last_reading.set_text(datetime.datetime.fromtimestamp(int(data["obdh_op_last_reading_ts"])).strftime('%Y/%m/%d'))
+            self.label_obdh_op_date_last_reading.set_text(datetime.datetime.fromtimestamp(int(data["obdh_op_last_reading_ts"])).strftime('%H:%M:%S'))
+
+        if "obdh_op_remaining_hib_time" in data:
+            self.label_obdh_op_remaining_hib_time.set_text(data["obdh_op_remaining_hib_time"] + " " + "min")
 
     def _load_default_values_eps(self):
         self.label_eps_mcu_date.set_text("1970/01/01")
@@ -411,6 +586,46 @@ class GUTV:
         self.label_eps_bat_rsac.set_text("0 mAh")
         self.label_eps_bat_rarc.set_text("0 %")
         self.label_eps_bat_rsrc.set_text("0 %")
+
+    def _load_default_values_obdh(self):
+        self.label_obdh_mcu_date.set_text("1970/01/01")
+        self.label_obdh_mcu_time.set_text("00:00:00")
+        self.label_obdh_mcu_temp.set_text("0 °C")
+        self.label_obdh_mcu_last_reset_cause.set_text("0")
+        self.label_obdh_mcu_reset_count.set_text("0")
+        self.label_obdh_general_voltage.set_text("0 mV")
+        self.label_obdh_general_current.set_text("0 mA")
+        self.label_obdh_mem_sec_obdh.set_text("0")
+        self.label_obdh_mem_sec_eps.set_text("0")
+        self.label_obdh_mem_sec_ttc_0.set_text("0")
+        self.label_obdh_mem_sec_ttc_1.set_text("0")
+        self.label_obdh_mem_sec_antenna.set_text("0")
+        self.label_obdh_mem_sec_edc.set_text("0")
+        self.label_obdh_mem_sec_payloadx.set_text("0")
+        self.label_obdh_mem_sec_sbcd.set_text("0")
+        self.label_obdh_position_lattitude.set_text("0°")
+        self.label_obdh_position_longitude.set_text("0°")
+        self.label_obdh_position_altitude.set_text("0 km")
+        self.textbuffer_obdh_position_tle.set_text(
+                "25544U 98067A   25054.44635474  .00024560  00000+0  44723-3 0  9992\n" +
+                "25544  51.6356 150.3745 0005991 304.7544  55.2880 15.49325184497521")
+        self.label_obdh_position_date.set_text("1970/01/01")
+        self.label_obdh_position_time.set_text("00:00:00")
+        self.label_obdh_op_last_valid_tc.set_text("0")
+        self.label_obdh_op_mode.set_text("Normal")
+        self.label_obdh_op_date_last_mode_change.set_text("1970/01/01")
+        self.label_obdh_op_time_last_mode_change.set_text("00:00:00")
+        self.label_obdh_op_mode_duration.set_text("0 sec")
+        self.label_obdh_op_initial_hib.set_text("Not Executed")
+        self.label_obdh_op_initial_hib_time.set_text("0 min")
+        self.label_obdh_op_manual_mode.set_text("Enabled")
+        self.label_obdh_op_main_edc.set_text("0")
+        self.label_obdh_op_general_tm.set_text("Enabled")
+        self.label_obdh_op_main_pl_state.set_text("0")
+        self.label_obdh_op_secondary_pl_state.set_text("0")
+        self.label_obdh_op_date_last_reading.set_text("1970/01/01")
+        self.label_obdh_op_time_last_reading.set_text("00:00:00")
+        self.label_obdh_op_remaining_hib_time.set_text("0 sec")
 
     def _create_socket_server(self, adr, port):
         """Create a TCP/IP socket server"""
