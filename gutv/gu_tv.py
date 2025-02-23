@@ -30,7 +30,7 @@ import datetime
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, GdkPixbuf, GLib
+from gi.repository import Gtk, Gdk, GdkPixbuf, GLib
 
 import gutv.version
 import gutv.convert
@@ -201,6 +201,9 @@ class GUTV:
         if "eps_timestamp" in data:
             self.label_eps_mcu_date.set_text(datetime.datetime.fromtimestamp(int(data["eps_timestamp"])).strftime('%Y/%m/%d'))
             self.label_eps_mcu_time.set_text(datetime.datetime.fromtimestamp(int(data["eps_timestamp"])).strftime('%H:%M:%S'))
+#            self.label_eps_mcu_time.override_color(Gtk.StateFlags.NORMAL, Gdk.RGBA(0, 1, 0, 1))
+#        else:
+#            self.label_eps_mcu_time.override_color(Gtk.StateFlags.NORMAL, Gdk.RGBA(0, 0, 0, 1))
 
         if "eps_mcu_temp" in data:
             self.label_eps_mcu_temp.set_text(str((int(data["eps_mcu_temp"]) - 273)) + " " + "°C")
