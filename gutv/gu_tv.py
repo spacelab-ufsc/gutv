@@ -156,7 +156,6 @@ class GUTV:
         self.label_obdh_position_longitude          = self.builder.get_object("label_obdh_position_longitude")
         self.label_obdh_position_altitude           = self.builder.get_object("label_obdh_position_altitude")
         self.textview_obdh_position_tle             = self.builder.get_object("textview_obdh_position_tle")
-
         self.textbuffer_obdh_position_tle           = self.textview_obdh_position_tle.get_buffer()
         self.label_obdh_position_date               = self.builder.get_object("label_obdh_position_date")
         self.label_obdh_position_time               = self.builder.get_object("label_obdh_position_time")
@@ -254,8 +253,8 @@ class GUTV:
         if "eps_mcu_last_rst_cause" in data:
             self.label_eps_mcu_last_reset_cause.set_text(data["eps_mcu_last_rst_cause"])
 
-        if "eps_mcu_rst_counter" in data:
-            self.label_eps_mcu_reset_count.set_text(data["eps_mcu_rst_counter"])
+        if "eps_mcu_rst_count" in data:
+            self.label_eps_mcu_reset_count.set_text(data["eps_mcu_rst_count"])
 
         if "eps_sp_volt_mypx" in data:
             self.label_eps_sp_volt_mypx.set_text(data["eps_sp_volt_mypx"] + " " + "mV")
@@ -378,10 +377,9 @@ class GUTV:
             else:
                 self.label_eps_bat_heater_2_mode.set_text("Unknown")
 
+        if "eps_bat_mon_temp" in data:
+            self.label_eps_bat_temp_monitor.set_text(str((int(data["eps_bat_mon_temp"]) - 273)) + " " + "°C")
         '''
-        if "" in data:
-            self.label_eps_bat_temp_monitor.set_text()
-
         if "" in data:
             self.label_eps_bat_status.set_text()
 
@@ -520,14 +518,14 @@ class GUTV:
             else:
                 self.label_obdh_op_general_tm.set_text("Unknown")
 
-        if "obdh_op_main_pl_state" in data:
-            if int(data["obdh_op_main_pl_state"]) == 0:
+        if "obdh_op_pl_main_state" in data:
+            if int(data["obdh_op_pl_main_state"]) == 0:
                 self.label_obdh_op_main_pl_state.set_text("Disabled")
             else:
                 self.label_obdh_op_main_pl_state.set_text(data["obdh_op_main_pl_state"])
 
-        if "obdh_op_sec_pl_state" in data:
-            if int(data["obdh_op_sec_pl_state"]) == 0:
+        if "obdh_op_pl_sec_state" in data:
+            if int(data["obdh_op_pl_sec_state"]) == 0:
                 self.label_obdh_op_secondary_pl_state.set_text("Disabled")
             else:
                 self.label_obdh_op_secondary_pl_state.set_text(data["obdh_op_sec_pl_state"])
@@ -660,7 +658,7 @@ class GUTV:
         """Handle incoming data from the client"""
         if condition == GLib.IO_IN:
             try:
-                data = client_socket.recv(1024)  # Read incoming data (max 1024 bytes)
+                data = client_socket.recv(2048)  # Read incoming data (max 1024 bytes)
                 if data:
                     self._decode_pkt(data)
                 else:
