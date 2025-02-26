@@ -155,6 +155,8 @@ class GUTV:
         self.label_obdh_position_lattitude          = self.builder.get_object("label_obdh_position_lattitude")
         self.label_obdh_position_longitude          = self.builder.get_object("label_obdh_position_longitude")
         self.label_obdh_position_altitude           = self.builder.get_object("label_obdh_position_altitude")
+        self.label_obdh_position_date               = self.builder.get_object("label_obdh_position_date")
+        self.label_obdh_position_time               = self.builder.get_object("label_obdh_position_time")
         self.textview_obdh_position_tle             = self.builder.get_object("textview_obdh_position_tle")
         self.textbuffer_obdh_position_tle           = self.textview_obdh_position_tle.get_buffer()
         self.label_obdh_position_date               = self.builder.get_object("label_obdh_position_date")
@@ -174,6 +176,54 @@ class GUTV:
         self.label_obdh_op_date_last_reading        = self.builder.get_object("label_obdh_op_date_last_reading")
         self.label_obdh_op_time_last_reading        = self.builder.get_object("label_obdh_op_time_last_reading")
         self.label_obdh_op_remaining_hib_time       = self.builder.get_object("label_obdh_op_remaining_hib_time")
+
+        # TTC
+        self.label_ttc_mcu1_date                    = self.builder.get_object("label_ttc_mcu1_date")
+        self.label_ttc_mcu1_time                    = self.builder.get_object("label_ttc_mcu1_time")
+        self.label_ttc_mcu1_temp                    = self.builder.get_object("label_ttc_mcu1_temp")
+        self.label_ttc_mcu1_last_rst_cause          = self.builder.get_object("label_ttc_mcu1_last_rst_cause")
+        self.label_ttc_mcu1_rst_count               = self.builder.get_object("label_ttc_mcu1_rst_count")
+        self.label_ttc_mcu1_volt                    = self.builder.get_object("label_ttc_mcu1_volt")
+        self.label_ttc_mcu1_curr                    = self.builder.get_object("label_ttc_mcu1_curr")
+        self.label_ttc_radio1_volt                  = self.builder.get_object("label_ttc_radio1_volt")
+        self.label_ttc_radio1_curr                  = self.builder.get_object("label_ttc_radio1_curr")
+        self.label_ttc_radio1_temp                  = self.builder.get_object("label_ttc_radio1_temp")
+        self.label_ttc_radio1_tx_en                 = self.builder.get_object("label_ttc_radio1_tx_en")
+        self.label_ttc_radio1_count                 = self.builder.get_object("label_ttc_radio1_count")
+        self.label_ttc_mcu1_date                    = self.builder.get_object("label_ttc_mcu1_date")
+        self.label_ttc_mcu1_time                    = self.builder.get_object("label_ttc_mcu1_time")
+        self.label_ttc_mcu1_temp                    = self.builder.get_object("label_ttc_mcu1_temp")
+        self.label_ttc_mcu1_last_rst_cause          = self.builder.get_object("label_ttc_mcu1_last_rst_cause")
+        self.label_ttc_mcu1_rst_count               = self.builder.get_object("label_ttc_mcu1_rst_count")
+        self.label_ttc_mcu1_volt                    = self.builder.get_object("label_ttc_mcu1_volt")
+        self.label_ttc_mcu1_curr                    = self.builder.get_object("label_ttc_mcu1_curr")
+        self.label_ttc_radio2_volt                  = self.builder.get_object("label_ttc_radio2_volt")
+        self.label_ttc_radio2_curr                  = self.builder.get_object("label_ttc_radio2_curr")
+        self.label_ttc_radio2_temp                  = self.builder.get_object("label_ttc_radio2_temp")
+        self.label_ttc_radio2_tx_en                 = self.builder.get_object("label_ttc_radio2_tx_en")
+        self.label_ttc_radio2_tx_count              = self.builder.get_object("label_ttc_radio2_tx_count")
+        self.label_ttc_radio2_rx_count              = self.builder.get_object("label_ttc_radio2_rx_count")
+
+        # Antenna
+        self.label_ant_temp                         = self.builder.get_object("label_ant_temp")
+        self.label_ant_temp                         = self.builder.get_object("label_ant_temp")
+        self.label_ant_deployment_exec              = self.builder.get_object("label_ant_deployment_exec")
+        self.label_ant_deployment_count             = self.builder.get_object("label_ant_deployment_count")
+        self.label_ant_indep_burn                   = self.builder.get_object("label_ant_indep_burn")
+        self.label_ant_ignore_switches              = self.builder.get_object("label_ant_ignore_switches")
+        self.label_ant_armed                        = self.builder.get_object("label_ant_armed")
+        self.label_ant_mp1_deployed                 = self.builder.get_object("label_ant_mp1_deployed")
+        self.label_ant_mp1_dep_stop                 = self.builder.get_object("label_ant_mp1_dep_stop")
+        self.label_ant_mp1_dep_sys                  = self.builder.get_object("label_ant_mp1_dep_sys")
+        self.label_ant_mp2_deployed                 = self.builder.get_object("label_ant_mp2_deployed")
+        self.label_ant_mp2_dep_stop                 = self.builder.get_object("label_ant_mp2_dep_stop")
+        self.label_ant_mp2_dep_sys                  = self.builder.get_object("label_ant_mp2_dep_sys")
+        self.label_ant_mp3_deployed                 = self.builder.get_object("label_ant_mp3_deployed")
+        self.label_ant_mp3_dep_stop                 = self.builder.get_object("label_ant_mp3_dep_stop")
+        self.label_ant_mp3_dep_sys                  = self.builder.get_object("label_ant_mp3_dep_sys")
+        self.label_ant_mp4_deployed                 = self.builder.get_object("label_ant_mp4_deployed")
+        self.label_ant_mp4_dep_stop                 = self.builder.get_object("label_ant_mp4_dep_stop")
+        self.label_ant_mp4_dep_sys                  = self.builder.get_object("label_ant_mp4_dep_sys")
 
         # About dialog
         self.aboutdialog = self.builder.get_object("aboutdialog_gutv")
@@ -379,10 +429,11 @@ class GUTV:
 
         if "eps_bat_mon_temp" in data:
             self.label_eps_bat_temp_monitor.set_text(str((int(data["eps_bat_mon_temp"]) - 273)) + " " + "°C")
-        '''
-        if "" in data:
-            self.label_eps_bat_status.set_text()
 
+#        if "eps_main_pwr_bus_volt" in data:
+#            self..set_text(data["eps_main_pwr_bus_volt"] + " " + "mV")
+
+        '''
         if "" in data:
             self.label_eps_bat_protection.set_text()
 
@@ -420,6 +471,9 @@ class GUTV:
         if "obdh_curr" in data:
             self.label_obdh_general_current.set_text(data["obdh_curr"] + " " + "mA")
 
+#        if "obdh_mem_data_log" in data:
+#            self..set_text(data["obdh_mem_data_log"])
+
         if "obdh_mem_sec_obdh" in data:
             self.label_obdh_mem_sec_obdh.set_text(data["obdh_mem_sec_obdh"])
 
@@ -452,6 +506,10 @@ class GUTV:
 
         if "obdh_pos_alt" in data:
             self.label_obdh_position_altitude.set_text(data["obdh_pos_alt"] + " " + "km")
+
+        if "obdh_pos_ts" in data:
+            self.label_obdh_position_date.set_text(datetime.datetime.fromtimestamp(int(data["obdh_pos_ts"])).strftime('%Y/%m/%d'))
+            self.label_obdh_position_time.set_text(datetime.datetime.fromtimestamp(int(data["obdh_pos_ts"])).strftime('%H:%M:%S'))
 
         if "obdh_pos_tle_line_1" in data:
             self.textbuffer_obdh_position_tle.set_text(data["obdh_pos_tle_line_1"])
@@ -537,6 +595,114 @@ class GUTV:
         if "obdh_op_remaining_hib_time" in data:
             self.label_obdh_op_remaining_hib_time.set_text(data["obdh_op_remaining_hib_time"] + " " + "min")
 
+        if "obdh_last_valid_tc_rssi" in data:
+            self.label_obdh_op_date_last_reading.set_text(datetime.datetime.fromtimestamp(int(data["obdh_last_valid_tc_rssi"])).strftime('%Y/%m/%d'))
+            self.label_obdh_op_time_last_reading.set_text(datetime.datetime.fromtimestamp(int(data["obdh_last_valid_tc_rssi"])).strftime('%H:%M:%S'))
+
+        if "obdh_sensor_read_ts" in data:
+            self.label_obdh_op_date_last_reading.set_text(datetime.datetime.fromtimestamp(int(data["obdh_sensor_read_ts"])).strftime('%Y/%m/%d'))
+            self.label_obdh_op_time_last_reading.set_text(datetime.datetime.fromtimestamp(int(data["obdh_sensor_read_ts"])).strftime('%H:%M:%S'))
+
+        if "ttc_radio1_temp" in data:
+            self.label_ttc_radio2_temp.set_text(str((int(data["ttc_radio1_temp"]) - 273)) + " " + "°C")
+
+        if "ant_temp" in data:
+            self.label_ant_temp.set_text(str((int(data["ant_temp"]) - 273)) + " " + "°C")
+
+        if "ant_status" in data:
+            ant_stat = int(data["ant_status"])
+            ant_mp1_deployed    = (ant_stat >> 15) & 0x0001
+            ant_mp1_dep_stop    = (ant_stat >> 14) & 0x0001
+            ant_mp1_dep_sys     = (ant_stat >> 13) & 0x0001
+            ant_mp2_deployed    = (ant_stat >> 11) & 0x0001
+            ant_mp2_dep_stop    = (ant_stat >> 10) & 0x0001
+            ant_mp2_dep_sys     = (ant_stat >> 9) & 0x0001
+            ant_mp3_deployed    = (ant_stat >> 7) & 0x0001
+            ant_mp3_dep_stop    = (ant_stat >> 6) & 0x0001
+            ant_mp3_dep_sys     = (ant_stat >> 5) & 0x0001
+            ant_mp4_deployed    = (ant_stat >> 3) & 0x0001
+            ant_mp4_dep_stop    = (ant_stat >> 2) & 0x0001
+            ant_mp4_dep_sys     = (ant_stat >> 1) & 0x0001
+            ant_ignore_sw       = (ant_stat >> 8) & 0x0001
+            ant_indb            = (ant_stat >> 4) & 0x0001
+            ant_armed           = ant_stat & 0x0001
+
+            if ant_indb:
+                self.label_ant_indep_burn.set_text("Enabled")
+            else:
+                self.label_ant_indep_burn.set_text("Disabled")
+
+            if ant_ignore_sw:
+                self.label_ant_ignore_switches.set_text("True")
+            else:
+                self.label_ant_ignore_switches.set_text("False")
+
+            if ant_armed:
+                self.label_ant_armed.set_text("True")
+            else:
+                self.label_ant_armed.set_text("False")
+
+            if ant_mp1_deployed:
+                self.label_ant_mp1_deployed.set_text("True")
+            else:
+                self.label_ant_mp1_deployed.set_text("False")
+
+            if ant_mp1_dep_stop:
+                self.label_ant_mp1_dep_stop.set_text("Timeout")
+            else:
+                self.label_ant_mp1_dep_stop.set_text("Other")
+
+            if ant_mp1_dep_sys:
+                self.label_ant_mp1_dep_sys.set_text("Activated")
+
+            else:
+                self.label_ant_mp1_dep_sys.set_text("Deactivated")
+
+            if ant_mp2_deployed:
+                self.label_ant_mp2_deployed.set_text("True")
+            else:
+                self.label_ant_mp2_deployed.set_text("False")
+
+            if ant_mp2_dep_stop:
+                self.label_ant_mp2_dep_stop.set_text("Timeout")
+            else:
+                self.label_ant_mp2_dep_stop.set_text("Other")
+
+            if ant_mp2_dep_sys:
+                self.label_ant_mp2_dep_sys.set_text("Activated")
+            else:
+                self.label_ant_mp2_dep_sys.set_text("Deactivated")
+
+            if ant_mp3_deployed:
+                self.label_ant_mp3_deployed.set_text("True")
+            else:
+                self.label_ant_mp3_deployed.set_text("False")
+
+            if ant_mp3_dep_stop:
+                self.label_ant_mp3_dep_stop.set_text("Timeout")
+            else:
+                self.label_ant_mp3_dep_stop.set_text("Other")
+
+            if ant_mp3_dep_sys:
+                self.label_ant_mp3_dep_sys.set_text("Activated")
+            else:
+                self.label_ant_mp3_dep_sys.set_text("Deactivated")
+
+            if ant_mp4_deployed:
+                self.label_ant_mp4_deployed.set_text("True")
+            else:
+                self.label_ant_mp4_deployed.set_text("False")
+
+            if ant_mp4_dep_stop:
+                self.label_ant_mp4_dep_stop.set_text("Timeout")
+            else:
+                self.label_ant_mp4_dep_stop.set_text("Other")
+
+            if ant_mp4_dep_sys:
+                self.label_ant_mp4_dep_sys.set_text("Activated")
+            else:
+                self.label_ant_mp4_dep_sys.set_text("Deactivated")
+
     def _load_default_values_eps(self):
         self.label_eps_mcu_date.set_text("1970/01/01")
         self.label_eps_mcu_time.set_text("00:00:00")
@@ -604,6 +770,8 @@ class GUTV:
         self.label_obdh_position_lattitude.set_text("0°")
         self.label_obdh_position_longitude.set_text("0°")
         self.label_obdh_position_altitude.set_text("0 km")
+        self.label_obdh_position_date.set_text("1970/01/01")
+        self.label_obdh_position_time.set_text("00:00:00")
         self.textbuffer_obdh_position_tle.set_text(
                 "25544U 98067A   25054.44635474  .00024560  00000+0  44723-3 0  9992\n" +
                 "25544  51.6356 150.3745 0005991 304.7544  55.2880 15.49325184497521")
